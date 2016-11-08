@@ -1,0 +1,22 @@
+2,3,4,5,6,7
+5,6,7,2,4,5
+
+path = 2,3,4,5,6,7
+
+la on prend le 5 on le criss a place du 2
+
+5,3,4,5,6,7
+
+il faut prendre la valeur que on avait et la
+
+5,3,4,2,6,7
+
+//Mutation par block
+Mutation 1-2-3-4-5-6
+
+startindex = 4 
+endIndex = 2
+
+1-2   3-4-5   6
+
+//Mutation par swap
