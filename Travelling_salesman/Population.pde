@@ -6,13 +6,15 @@ class Population{
   float averageFitness;
   float generationGain;
   
-  float sectionMutateRate = 10;
-  float swapMutateRate = 10;
+  float shuffleMutateRate = 5;
+  float swapMutateRate = 20;
+  int maxCitySwap;
   ArrayList<Agent> agents = new ArrayList<Agent>();
  
   Population(){
     for(int i = 0 ; i < agentAmount ; i++)
       agents.add(new Agent());
+    maxCitySwap = (cityAmount / 3) - 1;
   }
   void update(){
     
@@ -78,7 +80,7 @@ class Population{
 
     for(Agent a:agents){
       //Mutation par section
-      if(random(100) < sectionMutateRate){
+      if(random(100) < shuffleMutateRate){
         //selection du path a muter
         int startMutationIndex = (int)random(cityAmount);
         int endMutationIndex = (int)random(cityAmount);
@@ -107,28 +109,45 @@ class Population{
       
       //Mutation par swap
       if(random(100) < swapMutateRate){
-        int firstSwapIndex = (int)random(cityAmount);
-        int secondSwapIndex = (int)random(cityAmount);
+        int swapAmount = (int)random(1,maxCitySwap);
+
+        int firstSwapIndex = (int)random(cityAmount-(swapAmount+1));
+        int secondSwapIndex = 0;
+        //we find avaible second swap Index
+        while(!((secondSwapIndex = (int)random(cityAmount-(swapAmount+1))) > firstSwapIndex + swapAmount ||
+                 secondSwapIndex < firstSwapIndex - swapAmount)){}
         
-        int tempCityIndex = a.path.get(firstSwapIndex);
-        a.path.set(firstSwapIndex,a.path.get(secondSwapIndex));
-        a.path.set(secondSwapIndex,tempCityIndex);
+        ArrayList<Integer> firstSequence = new ArrayList<Integer>();
+        ArrayList<Integer> secondSequence = new ArrayList<Integer>();
+        for(int i = 0 ; i < swapAmount;i++){
+          firstSequence.add(a.path.get(firstSwapIndex + i));
+          secondSequence.add(a.path.get(secondSwapIndex + i));
+        }
+        a.path.removeAll(firstSequence);
+        a.path.addAll(firstSwapIndex,secondSequence);
+       
+        //remove secondSequence with for to avoid removing just added secondSequence
+        for(int i = 0 ; i < swapAmount ; i++)
+          a.path.remove(secondSwapIndex);
+
+        a.path.addAll(secondSwapIndex,firstSequence);
+
       }
     }
   }
   
   void drawBest(){
-    
+    int bestIndex = 0;
     for(int i = 0 ; i < cityAmount-1 ; i++){
       stroke(color(random(255),random(255),random(255)));
-      line(cities.get(agents.get(0).path.get(i) ).location.x, cities.get(agents.get(0).path.get(i) ).location.y,
-           cities.get(agents.get(0).path.get(i+1) ).location.x, cities.get(agents.get(0).path.get(i+1) ).location.y);
+      line(cities.get(agents.get(bestIndex).path.get(i) ).location.x, cities.get(agents.get(bestIndex).path.get(i) ).location.y,
+           cities.get(agents.get(bestIndex).path.get(i+1) ).location.x, cities.get(agents.get(bestIndex).path.get(i+1) ).location.y);
     }
            
     noFill();
     stroke(#e50404);
-    ellipse(cities.get(agents.get(0).path.get(0) ).location.x, cities.get(agents.get(0).path.get(0) ).location.y,20,20);
-    ellipse(cities.get(agents.get(0).path.get(cityAmount-1) ).location.x, cities.get(agents.get(0).path.get(cityAmount-1) ).location.y,20,20);
+    ellipse(cities.get(agents.get(bestIndex).path.get(0) ).location.x, cities.get(agents.get(bestIndex).path.get(0) ).location.y,20,20);
+    ellipse(cities.get(agents.get(bestIndex).path.get(cityAmount-1) ).location.x, cities.get(agents.get(bestIndex).path.get(cityAmount-1) ).location.y,20,20);
         
   }
   

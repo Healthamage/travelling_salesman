@@ -20,3 +20,11 @@ endIndex = 2
 1-2   3-4-5   6
 
 //Mutation par swap
+
+0-1-2-3-4-5-6-7-8
+
+first swap index = 5
+swap amount = 3
+
+secondSwap have to be > 5+3
+secondSwap have to be < 5-3

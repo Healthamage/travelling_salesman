@@ -1,6 +1,6 @@
 
 ArrayList<City> cities;
-int cityAmount = 25;
+int cityAmount = 500;
 Population population;
 
 void setup(){
@@ -20,5 +20,5 @@ void draw(){
   for(City c:cities)
     c.display();
   
- // delay(200);
+  //delay(10);
 }
