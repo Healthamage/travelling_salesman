@@ -1,8 +1,8 @@
-class Agent implements Comparable{
+class Ant implements Comparable{
   
-  float fitness;
   ArrayList<Integer> path = new ArrayList<Integer>();
-  Agent(){
+  float fitness;
+  Ant(){
     int cityIndex;
     for(int i = 0 ; i < cityAmount ; i++){
       while(path.contains(cityIndex = (int)random(cityAmount))){}
@@ -11,7 +11,7 @@ class Agent implements Comparable{
   }
   
   //constructor from parents
-  Agent(ArrayList<Integer> path){
+  Ant(ArrayList<Integer> path){
     this.path = path;
   }
   
@@ -24,8 +24,9 @@ class Agent implements Comparable{
   void setPath (ArrayList<Integer> path){
     this.path = path;
   }
+  
   int compareTo(Object other){
-    Agent agent = (Agent)other;
-    return (int)(fitness - agent.fitness);
+    Ant ant = (Ant)other;
+    return (int)(fitness - ant.fitness);
   }
 }
